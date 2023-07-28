@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Transaction;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon as SupportCarbon;
+use Illuminate\Support\Facades\Hash;
 
 class TransactionController extends Controller
 {
@@ -20,7 +23,11 @@ class TransactionController extends Controller
             ]
             );
         ;
-        dd($credentials);
+        if($credentials["code"]){
+            $trans=Transaction::handleTransOnAccount($credentials);
+            $code = str_shuffle(substr( Hash::make($credentials["date"]),0,25));
+            $trans->update(["code"=>$code]);
+        }
 
     }
 }
