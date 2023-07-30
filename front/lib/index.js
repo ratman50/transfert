@@ -8,6 +8,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var _a;
 let phones = document.querySelectorAll(".phone");
 const URL_API = "http://127.0.0.1:8000/api/";
 const ClassFournisseur = document.querySelector(".fournisseurs");
@@ -16,10 +17,14 @@ const valider = document.getElementById("valider");
 const transaction = document.getElementById("transaction");
 const compte_info = document.getElementById("compte_info");
 const detail = document.querySelector(".detail");
+const code = document.getElementById('code');
+const aff_code = document.getElementById('aff_code');
+const generated = document.querySelector(".generated");
 let fournisseurAuthorized;
 var myHeaders = new Headers();
 myHeaders.append("Content-Type", "application/json");
 myHeaders.append("Accept", "application/json");
+let compteDepot;
 ;
 let dataSend = {
     user: "",
@@ -81,19 +86,21 @@ phones.forEach((phone) => {
         if (reg.test(value)) {
             user = (yield getUser(`${URL_API}user/${value}`));
             valueInput = "non definie";
+            compte_info === null || compte_info === void 0 ? void 0 : compte_info.classList.remove("active");
             if (user) {
                 valueInput = user.name;
                 dataSend.user = user.id;
+                compte_info === null || compte_info === void 0 ? void 0 : compte_info.classList.add("active");
                 fillDetail(user, detail);
                 const fournisseur = user.fournisseur;
+                sender = Object.assign({}, user);
                 if (fournisseur && element.classList.contains("expide")) {
-                    sender = user;
                     const color = tabExpediteur.get(fournisseur.toUpperCase()) || "transparent";
                     expediteur.style.backgroundColor = color;
                 }
-                // else if(!element.classList.contains("expide")){
-                //     dataSend.compte=element.value;
-                // }
+                else if (!element.classList.contains("expide")) {
+                    dataSend.compte = element.value;
+                }
                 // else
                 // expediteur.innerHTML=epx;
             }
@@ -104,13 +111,14 @@ phones.forEach((phone) => {
     }));
 });
 ClassFournisseur === null || ClassFournisseur === void 0 ? void 0 : ClassFournisseur.addEventListener("change", () => {
+    var _a;
     const val = +ClassFournisseur.value;
     const blues = document.querySelectorAll(".blue");
     blues.forEach((blue) => {
         const color = tabExpediteur.get(fournisseurs[val - 1]) || "transparent";
         blue.style.backgroundColor = color;
     });
-    const numero = document.getElementById("numero");
+    // const numero=document.getElementById("numero");
     ValMontant.classList.remove("active");
     const minIndice = montantMin[val - 1];
     const not_montant = document.querySelector(".not_montant");
@@ -119,9 +127,12 @@ ClassFournisseur === null || ClassFournisseur === void 0 ? void 0 : ClassFournis
     if (+ValMontant.value < minIndice) {
         not_montant.textContent += " " + minIndice;
         not_montant.classList.add("active");
-        console.log(minIndice);
-        console.log(not_montant);
         ValMontant.classList.add("active");
+    }
+    const posFourni = +ClassFournisseur.value - 1;
+    fournisseurAuthorized = fournisseurs[posFourni];
+    if (sender) {
+        compteDepot = (_a = sender.compte.find(com => com.numero.startsWith(fournisseurAuthorized))) === null || _a === void 0 ? void 0 : _a.numero;
     }
 });
 ValMontant.addEventListener("input", () => {
@@ -137,12 +148,13 @@ ValMontant.addEventListener("input", () => {
     }
 });
 valider === null || valider === void 0 ? void 0 : valider.addEventListener("click", () => {
-    var _a;
     const type = transaction.options[transaction.options.selectedIndex].textContent || "";
     dataSend.type = type == "depot" ? "1" : "2";
     dataSend.montant = ValMontant.value;
     dataSend.date = new Date();
-    dataSend.compte = (_a = document.querySelector("#recep")) === null || _a === void 0 ? void 0 : _a.value;
+    if (code.checked)
+        dataSend.code = true;
+    // dataSend.compte=document.querySelector<HTMLInputElement>("#recep")?.value;
     dataSend.user = sender.id;
     let raw = JSON.stringify(dataSend);
     var requestOptions = {
@@ -153,7 +165,12 @@ valider === null || valider === void 0 ? void 0 : valider.addEventListener("clic
     console.log(dataSend);
     fetch(`${URL_API}transaction`, requestOptions)
         .then(response => response.json())
-        .then(result => console.log(result))
+        .then(result => {
+        console.log(result);
+        if (dataSend.code) {
+            generated === null || generated === void 0 ? void 0 : generated.querySelector("p").textContent = result.code;
+        }
+    })
         .catch(error => console.log('error', error));
 });
 compte_info === null || compte_info === void 0 ? void 0 : compte_info.addEventListener('click', (event) => {
@@ -165,12 +182,23 @@ transaction.addEventListener("change", (event) => {
     const element = event.target;
     const dest = document.querySelector(".dest");
     dest === null || dest === void 0 ? void 0 : dest.classList.remove("disabled");
-    if (element.value == "2") {
-        dest === null || dest === void 0 ? void 0 : dest.classList.add("disabled");
-    }
     if (ClassFournisseur.value) {
         const posFourni = +ClassFournisseur.value - 1;
         fournisseurAuthorized = fournisseurs[posFourni];
-        console.log(fournisseurAuthorized);
     }
+    if (element.value == "2") {
+        dest === null || dest === void 0 ? void 0 : dest.classList.add("disabled");
+        console.log(compteDepot);
+        code.checked = false;
+        dataSend.compte = compteDepot;
+    }
+});
+aff_code === null || aff_code === void 0 ? void 0 : aff_code.addEventListener("click", () => {
+    var _a;
+    (_a = generated === null || generated === void 0 ? void 0 : generated.parentElement) === null || _a === void 0 ? void 0 : _a.classList.add("active");
+});
+(_a = generated === null || generated === void 0 ? void 0 : generated.querySelector("button")) === null || _a === void 0 ? void 0 : _a.addEventListener('click', (event) => {
+    var _a;
+    console.log(event.target);
+    (_a = generated.parentElement) === null || _a === void 0 ? void 0 : _a.classList.remove("active");
 });

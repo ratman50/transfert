@@ -6,14 +6,18 @@ const valider=document.getElementById("valider");
 const transaction=document.getElementById("transaction")as HTMLSelectElement;
 const compte_info=document.getElementById("compte_info");
 const detail=document.querySelector(".detail") as HTMLElement;
+const code =document.getElementById('code') as HTMLFormElement;
+const aff_code=document.getElementById('aff_code');
+const generated=document.querySelector(".generated") ;
 let   fournisseurAuthorized:string;
 var myHeaders = new Headers();
 myHeaders.append("Content-Type", "application/json");
 myHeaders.append("Accept", "application/json");
-
+let compteDepot:string|undefined;
 interface ISend{
     user:string;
     compte?:string;
+    code?:boolean;
     montant:string;
     type:string;
     date:Date;
@@ -107,21 +111,22 @@ phones.forEach((phone)=>{
         {
             user=await getUser(`${URL_API}user/${value}`) as IUser;
             valueInput="non definie";
+            compte_info?.classList.remove("active");
             if(user){
                 valueInput=user.name;
                 dataSend.user=user.id;
-                
+                compte_info?.classList.add("active")
                 fillDetail(user, detail);
                 const fournisseur=user.fournisseur;
+                sender={...user};
                 if(fournisseur && element.classList.contains("expide")){
-                    sender=user;
                     const color=tabExpediteur.get(fournisseur!.toUpperCase()) || "transparent";
                     expediteur.style.backgroundColor=color;
                 }
-                // else if(!element.classList.contains("expide")){
-                //     dataSend.compte=element.value;
+                else if(!element.classList.contains("expide")){
+                    dataSend.compte=element.value;
 
-                // }
+                }
                 // else
                 // expediteur.innerHTML=epx;
             }else
@@ -141,7 +146,7 @@ ClassFournisseur?.addEventListener("change",()=>{
         const color=tabExpediteur.get(fournisseurs[val-1])||"transparent";
         blue.style.backgroundColor=  color;   
     });
-    const numero=document.getElementById("numero");
+    // const numero=document.getElementById("numero");
     ValMontant.classList.remove("active");
     const minIndice=montantMin[val-1];
     const not_montant=document.querySelector(".not_montant") as HTMLElement;
@@ -150,11 +155,17 @@ ClassFournisseur?.addEventListener("change",()=>{
     if(+ValMontant.value<minIndice ){
         not_montant.textContent+=" "+minIndice;
         not_montant.classList.add("active");
-        console.log(minIndice);
-        console.log(not_montant);
-        
         ValMontant.classList.add("active");
     }
+    const posFourni=+ClassFournisseur.value-1;
+    fournisseurAuthorized=fournisseurs[posFourni];
+    if(sender)
+    {
+        compteDepot=sender.compte.find(com=>com.numero.startsWith(fournisseurAuthorized))?.numero;
+                
+    }
+    
+    
     
 });
 
@@ -177,7 +188,9 @@ valider?.addEventListener("click",()=>{
     dataSend.type=type=="depot"?"1":"2";
     dataSend.montant=ValMontant.value;
     dataSend.date=new Date();
-    dataSend.compte=document.querySelector<HTMLInputElement>("#recep")?.value;
+    if(code.checked)
+        dataSend.code=true;
+    // dataSend.compte=document.querySelector<HTMLInputElement>("#recep")?.value;
     dataSend.user=sender.id;
     let raw=JSON.stringify(dataSend);
     var requestOptions = {
@@ -189,7 +202,14 @@ valider?.addEventListener("click",()=>{
       
       fetch(`${URL_API}transaction`, requestOptions)
       .then(response => response.json())
-      .then(result => console.log(result))
+      .then(result =>{
+          console.log(result);
+          if(dataSend.code){
+            generated?.querySelector("p")!.textContent=result.code;
+          }
+        } 
+
+      )
       .catch(error => console.log('error', error));
 
 })
@@ -207,16 +227,29 @@ transaction.addEventListener("change",(event)=>{
     const dest=document.querySelector(".dest");
 
     dest?.classList.remove("disabled");
-    if(element.value=="2"){
-        dest?.classList.add("disabled");
-    }
-    
     if(ClassFournisseur.value)
     {
         const posFourni=+ClassFournisseur.value-1;
         fournisseurAuthorized=fournisseurs[posFourni];
-        console.log(fournisseurAuthorized);
         
         
     }
+    if(element.value=="2"){
+        dest?.classList.add("disabled");
+        console.log(compteDepot);
+        code.checked=false;
+        dataSend.compte=compteDepot;
+       
+    }
+    
+})
+
+aff_code?.addEventListener("click",()=>{
+    generated?.parentElement?.classList.add("active");
+})
+
+generated?.querySelector("button")?.addEventListener('click',(event)=>{
+    console.log(event.target);
+    
+    generated.parentElement?.classList.remove("active");
 })

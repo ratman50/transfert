@@ -26,7 +26,7 @@ body{
 .container{
     border: 1px solid;
     width: 700px;
-    height: 65%;
+    height: 80%;
     border-radius: 12px;
 }
 header{
@@ -36,6 +36,7 @@ header{
 }
 main{
     gap: 10px;
+    position: relative;
 }
 .child{
     width: 80%;
@@ -83,13 +84,18 @@ main{
 .not_montant.active{
     visibility: visible;
 }
-#compte_info{
+#compte_info
+{
     width: 30px;
     height: 20px;
     border-radius: 50%;
     background-color: aquamarine;
     font-size: 1.2rem;
     align-self: flex-end;
+    visibility: hidden;
+}
+#compte_info.active{
+    visibility: visible;
 }
 .detail{
     position: absolute;
@@ -107,7 +113,7 @@ main{
 }
 .detail.active{
     /* border: 1px solid; */
-    width: 250px;
+    width: 400px;
     padding: 2px;
     
 }
@@ -118,3 +124,20 @@ main{
     visibility: hidden;
 }
 
+.container_code{
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+    top: 0;
+    left: 0;
+    display: none;
+    background-color: rgba(105, 105, 105, 0.781);
+}
+.container_code.active{
+    display: flex;
+}
+.generated{
+    background-color: rgba(220, 245, 243, 0.654);
+    width: 230px;
+    border-radius: 12px;
+}

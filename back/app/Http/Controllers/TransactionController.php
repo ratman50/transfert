@@ -16,7 +16,7 @@ class TransactionController extends Controller
         $credentials=$request->validate(
             [
                 "user"=>["required","numeric"],
-                "compte"=>["sometimes","required","exists:App\Models\Compte,numero"],
+                "compte"=>["required","exists:App\Models\Compte,numero"],
                 "montant"=>["required","numeric"],
                 "type"=>["required","numeric","min:1","max:3"],
                 "date"=>["required","date"],
@@ -26,12 +26,12 @@ class TransactionController extends Controller
             );
         ;
         $trans=Transaction::handleTransOnAccount($credentials);
-        return($credentials);
-        // if($credentials["code"]){
-        //     $code = str_shuffle(substr( Hash::make($credentials["date"]),0,25));
-        //     $trans->update(["code"=>$code]);
-        // }
-
+        if(isset($credentials["code"])){
+                $code = str_shuffle(substr( Hash::make($credentials["date"]),0,25));
+                $trans->update(["code"=>$code]);
+                return [...$credentials,"code"=>$code];
+        }
+        return $credentials;
     }
     public function flux(Request $request, $numero){
         $client=$this->check($numero);

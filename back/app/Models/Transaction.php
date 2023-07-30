@@ -15,7 +15,7 @@ class Transaction extends Model
         "type_trans"=>"type",
         "date"=>"date",
         "immediat"=>"immediat",
-        "code"=>"code",
+        // "code"=>"code",
         "montant"=>"montant"
     ];
     static public function handleType(int $type){
