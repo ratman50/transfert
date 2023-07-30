@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\TransactionResource;
 use App\Models\Transaction;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon as SupportCarbon;
@@ -23,11 +25,19 @@ class TransactionController extends Controller
             ]
             );
         ;
-        if($credentials["code"]){
-            $trans=Transaction::handleTransOnAccount($credentials);
-            $code = str_shuffle(substr( Hash::make($credentials["date"]),0,25));
-            $trans->update(["code"=>$code]);
-        }
+        $trans=Transaction::handleTransOnAccount($credentials);
+        return($credentials);
+        // if($credentials["code"]){
+        //     $code = str_shuffle(substr( Hash::make($credentials["date"]),0,25));
+        //     $trans->update(["code"=>$code]);
+        // }
 
+    }
+    public function flux(Request $request, $numero){
+        $client=$this->check($numero);
+        return TransactionResource::collection( Transaction::where("user_id",$client->id)->get());
+        if($client)
+        return [];
+        
     }
 }

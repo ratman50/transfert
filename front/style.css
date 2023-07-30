@@ -1,0 +1,120 @@
+*{
+    box-sizing: content-box;
+}
+body{
+    width: 99vw;
+    height: 80vh;
+}
+.w-100{
+    width: 100%;
+}
+.flex{
+    display: flex;
+}
+.f_d_c{
+    flex-direction: column;
+}
+.jcc{
+    justify-content: center;
+}
+.jcsb{
+    justify-content: space-between;
+}
+.aic{
+    align-items: center;
+}
+.container{
+    border: 1px solid;
+    width: 700px;
+    height: 65%;
+    border-radius: 12px;
+}
+header{
+    font-size: 3rem;
+    padding-bottom: 20px;
+    text-align: center;
+}
+main{
+    gap: 10px;
+}
+.child{
+    width: 80%;
+    height: 30%;
+}
+.child_label{
+    font-style: italic;
+    width: 100%;
+    font-weight: bolder;
+    font-size: 1.2rem;
+
+}
+.divider{
+    height: 1px;
+    width: 100%;
+    background-color:black;
+
+}
+.left{
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+}
+.container_input{
+    display: flex;
+    width: 70%;
+    position: relative;
+}
+.input{
+    padding: 5px;
+    display: flex;
+    flex-direction: column;
+}
+.inputs .input{
+    width: 50%;
+}
+#montant.active{
+    outline: 1px solid red;
+    
+}
+.not_montant{
+    color: brown;
+    visibility: hidden;
+}
+.not_montant.active{
+    visibility: visible;
+}
+#compte_info{
+    width: 30px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: aquamarine;
+    font-size: 1.2rem;
+    align-self: flex-end;
+}
+.detail{
+    position: absolute;
+    /* padding: 2px; */
+    border-radius: 12px;
+    box-shadow: 1px 1px 1px;
+    left: 105%;
+    top: 0;
+    width: 0;
+    height: 300px;
+    overflow-x:scroll;  
+    overflow-y:scroll;  
+    transition: width ease 1s;
+    background-color: darkgrey;
+}
+.detail.active{
+    /* border: 1px solid; */
+    width: 250px;
+    padding: 2px;
+    
+}
+.dest{
+    transition:  visibility .8s ease;    
+}
+.dest.disabled{
+    visibility: hidden;
+}
+

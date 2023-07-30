@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Document</title>
+</head>
+<body class="flex jcc aic">
+    <div class="container">
+        <header>Breukh-Transfert</header>
+        <main class="flex jcc aic f_d_c">
+            <div class="child ">
+                <label class="child_label variant">Expediteur</label>
+               <div class="divider"></div>
+               <div class="left">
+
+                   <div class="container_input jcc aic ">
+                       <div class="input">
+                           <label for="" >N°Compte/Tel</label>
+                           <input type="text" class="phone expide" name="" id="numero">
+                       </div>
+                       <div class="input">
+                           <label for="">Nom Complet</label>
+                           <input type="text" name="" id="" disabled>
+                       </div>
+                       <button id="compte_info">i</button>
+                       <div class="detail">
+                        <h3 class="name">nom:<span>Pape Mactar</span> </h3>
+                        <p class="numero">numero:<span>771143226</span></p>
+                        <p>Historiques</p>
+                        <table>
+                            <thead>
+                                <tr><th>Destinataire</th> <th>montant</th> <th>type</th>  <th>date</th> </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>Compte</td><td>valeur</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    </div>
+               </div>
+            </div>
+            <div class="child">
+                <label class="child_label blue">Transaction</label>
+               <div class="divider"></div>
+               <div class="left">
+
+                   <div class="container_input   f_d_c">
+                       <div class="input flex f_d_c">
+                           <label for="">Montant</label>
+                           <input type="text" name="" id="montant" class="SendMontant">
+                           <p class="not_montant">
+                                le montant minimum est
+                           </p>
+                       </div>
+                       <div class="inputs flex ">
+                           <div class="input">
+                               <label for="">Fournisseur</label>
+                               <select name="" id="" class="fournisseurs">
+                                   <option value="">Choisir un Fournisseur</option>
+                                   <option value="1">Orange Money</option>
+                                   <option value="2">Wave</option>
+                                   <option value="3">Compte Bancaire</option>
+                                   <option value="4">Wari</option>
+                               </select>
+                               <p class="notif_fournisseur">
+
+                               </p>
+                           </div>
+                           <div class="input">
+                               <label for="">Transaction</label>
+                               <select name=""  id="transaction">
+                                   <option value="">choisir un type de Transaction</option>
+                                   <option value="1">depot</option>
+                                   <option value="2">retrait</option>
+                               </select>
+                           </div>
+   
+                       </div>
+                   </div>
+               </div>
+            </div>
+            <div class="child">
+                <label class="child_label blue">Destination</label>
+               <div class="divider"></div>
+               <div class="left">
+
+                   <div class="container_input dest">
+                       <div class="input">
+                           <label for="" >N°Compte/Tel</label>
+                           <input type="text" class="phone" name="" id="recep">
+                       </div>
+                       <div class="input">
+                           <label for="">Nom Complet</label>
+                           <input type="text" name="" id="" disabled>
+                       </div>
+                   </div>
+               </div>
+            </div>
+            <div class="container_btn">
+                <button type="button" id="valider">Valider</button>
+            </div>
+           
+        </main>
+    </div>
+    <script src="./lib/index.js" type="module"></script>
+</body>
+</html>

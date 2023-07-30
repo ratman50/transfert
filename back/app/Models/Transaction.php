@@ -50,7 +50,6 @@ class Transaction extends Model
             if($solde>0){
                 $benef->update(["solde"=>$solde]);
                 $res["type_trans"]=Transaction::handleType($res["type_trans"]);
-                $res["user_id"]=User::where("numero",$res['user_id'])->first()->id;
                 $transaction =Transaction::create($res);
                 return $transaction;
             }
