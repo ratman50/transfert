@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('comptes', function (Blueprint $table) {
-            $table->string("numero");
+            $table->string("numero")->unique();
             $table->float("solde");
             $table->timestamps();
             $table->primary("numero");

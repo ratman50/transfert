@@ -19,9 +19,20 @@ class UserSeeder extends Seeder
              "name"  =>"Moussa",
              "numero"=>"771143226",
              'password' => Hash::make('$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi') // password
-            ],[
+            ],
+            [
              "name"  =>"Moussa",
              "numero"=>"779031028",
+             'password' =>Hash::make('$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi')// password
+            ],
+            [
+             "name"  =>"Malick",
+             "numero"=>"774306471",
+             'password' =>Hash::make('$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi')// password
+            ],
+            [
+             "name"  =>"tiora",
+             "numero"=>"779444609",
              'password' =>Hash::make('$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi')// password
             ],
             

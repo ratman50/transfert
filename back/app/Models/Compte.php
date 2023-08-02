@@ -12,4 +12,8 @@ class Compte extends Model
         "created_at",
         "updated_at"
     ];
+    protected $fillable=[
+        "numero",
+        "solde"
+    ];
 }

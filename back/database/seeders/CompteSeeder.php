@@ -26,6 +26,18 @@ class CompteSeeder extends Seeder
                 "numero"=>"CB_771143226",
                 "solde"=>2000
             ],
+            [
+                "numero"=>"OM_779031028",
+                "solde"=>2000
+            ],
+            [
+                "numero"=>"OM_779444609",
+                "solde"=>1000
+            ],
+            [
+                "numero"=>"WV_779444609",
+                "solde"=>1000
+            ],
         ];
         Compte::insert($comptes);
     }

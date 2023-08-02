@@ -8,7 +8,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var _a;
+var _a, _b;
 let phones = document.querySelectorAll(".phone");
 const URL_API = "http://127.0.0.1:8000/api/";
 const ClassFournisseur = document.querySelector(".fournisseurs");
@@ -17,15 +17,27 @@ const valider = document.getElementById("valider");
 const transaction = document.getElementById("transaction");
 const compte_info = document.getElementById("compte_info");
 const detail = document.querySelector(".detail");
-const code = document.getElementById('code');
-const aff_code = document.getElementById('aff_code');
 const generated = document.querySelector(".generated");
+const numero = document.getElementById("numero");
 let fournisseurAuthorized;
 var myHeaders = new Headers();
 myHeaders.append("Content-Type", "application/json");
 myHeaders.append("Accept", "application/json");
 let compteDepot;
+valider.disabled = true;
 ;
+const notif = (_a = numero.parentElement) === null || _a === void 0 ? void 0 : _a.querySelector(".notification_numero");
+function handleNumSender() {
+    const reg = /^(\d{9})$/;
+    notif === null || notif === void 0 ? void 0 : notif.classList.add("disabled");
+    numero.classList.remove("active");
+    if (sender && fournisseurs[ClassFournisseur.selectedIndex - 1] == "WR" && !reg.test(numero.value)) {
+        notif === null || notif === void 0 ? void 0 : notif.classList.remove("disabled");
+        console.log(notif);
+        notif === null || notif === void 0 ? void 0 : notif.classList.add("active");
+        numero.classList.add("active");
+    }
+}
 let dataSend = {
     user: "",
     compte: "",
@@ -38,6 +50,14 @@ const fournisseurs = [
     "WV",
     "CB",
     "WR",
+];
+const type_trans = [
+    {
+        id: 1, val: "depot"
+    },
+    {
+        id: 2, val: "retrait"
+    },
 ];
 const montantMin = [
     500,
@@ -96,29 +116,34 @@ phones.forEach((phone) => {
                 sender = Object.assign({}, user);
                 if (fournisseur && element.classList.contains("expide")) {
                     const color = tabExpediteur.get(fournisseur.toUpperCase()) || "transparent";
+                    handleNumSender();
                     expediteur.style.backgroundColor = color;
                 }
                 else if (!element.classList.contains("expide")) {
                     dataSend.compte = element.value;
+                    notif === null || notif === void 0 ? void 0 : notif.classList.add("disabled");
+                    notif === null || notif === void 0 ? void 0 : notif.classList.remove("active");
+                    numero.classList.remove("active");
                 }
                 // else
                 // expediteur.innerHTML=epx;
             }
-            else
+            else {
                 expediteur.style.backgroundColor = "transparent";
+            }
         }
         sibling.querySelector("input").value = valueInput;
     }));
 });
-ClassFournisseur === null || ClassFournisseur === void 0 ? void 0 : ClassFournisseur.addEventListener("change", () => {
+ClassFournisseur === null || ClassFournisseur === void 0 ? void 0 : ClassFournisseur.addEventListener("change", (event) => {
     var _a;
+    const target = event.target;
     const val = +ClassFournisseur.value;
     const blues = document.querySelectorAll(".blue");
     blues.forEach((blue) => {
         const color = tabExpediteur.get(fournisseurs[val - 1]) || "transparent";
         blue.style.backgroundColor = color;
     });
-    // const numero=document.getElementById("numero");
     ValMontant.classList.remove("active");
     const minIndice = montantMin[val - 1];
     const not_montant = document.querySelector(".not_montant");
@@ -134,6 +159,7 @@ ClassFournisseur === null || ClassFournisseur === void 0 ? void 0 : ClassFournis
     if (sender) {
         compteDepot = (_a = sender.compte.find(com => com.numero.startsWith(fournisseurAuthorized))) === null || _a === void 0 ? void 0 : _a.numero;
     }
+    handleNumSender();
 });
 ValMontant.addEventListener("input", () => {
     const val = +ClassFournisseur.value;
@@ -152,8 +178,6 @@ valider === null || valider === void 0 ? void 0 : valider.addEventListener("clic
     dataSend.type = type == "depot" ? "1" : "2";
     dataSend.montant = ValMontant.value;
     dataSend.date = new Date();
-    if (code.checked)
-        dataSend.code = true;
     // dataSend.compte=document.querySelector<HTMLInputElement>("#recep")?.value;
     dataSend.user = sender.id;
     let raw = JSON.stringify(dataSend);
@@ -168,7 +192,7 @@ valider === null || valider === void 0 ? void 0 : valider.addEventListener("clic
         .then(result => {
         console.log(result);
         if (dataSend.code) {
-            generated === null || generated === void 0 ? void 0 : generated.querySelector("p").textContent = result.code;
+            generated.querySelector("p").textContent = result.code;
         }
     })
         .catch(error => console.log('error', error));
@@ -189,15 +213,10 @@ transaction.addEventListener("change", (event) => {
     if (element.value == "2") {
         dest === null || dest === void 0 ? void 0 : dest.classList.add("disabled");
         console.log(compteDepot);
-        code.checked = false;
         dataSend.compte = compteDepot;
     }
 });
-aff_code === null || aff_code === void 0 ? void 0 : aff_code.addEventListener("click", () => {
-    var _a;
-    (_a = generated === null || generated === void 0 ? void 0 : generated.parentElement) === null || _a === void 0 ? void 0 : _a.classList.add("active");
-});
-(_a = generated === null || generated === void 0 ? void 0 : generated.querySelector("button")) === null || _a === void 0 ? void 0 : _a.addEventListener('click', (event) => {
+(_b = generated === null || generated === void 0 ? void 0 : generated.querySelector("button")) === null || _b === void 0 ? void 0 : _b.addEventListener('click', (event) => {
     var _a;
     console.log(event.target);
     (_a = generated.parentElement) === null || _a === void 0 ? void 0 : _a.classList.remove("active");

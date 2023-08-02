@@ -15,14 +15,18 @@ return new class extends Migration
     {
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(User::class)->constrained();
-            $table->string("compte_id")->nullable();
-            $table->foreign("compte_id")->references("numero")->on("comptes");
+            $table->foreignId("expediteur_id")->constrained("users");
+            $table->string("compte_exp")->nullable();
+            $table->foreign("compte_exp")->references("numero")->on("comptes");
+            $table->foreignId("destinataire_id")->constrained("users");
+            $table->string("compte_dest")->nullable();
+            $table->foreign("compte_dest")->references("numero")->on("comptes");
             $table->float("montant");
             $table->enum("type_trans",["depot","retrait","transfert"]);
-            $table->string("date")->date;
-            $table->string("code",25)->nullable();
-            $table->string("code_immediat",30)->nullable();
+            $table->dateTime("date");
+            $table->string("code",30)->nullable();
+            $table->boolean("immediat")->default(false);
+            $table->boolean("retire")->default(false);
             $table->timestamps();
         });
     }

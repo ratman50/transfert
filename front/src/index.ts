@@ -2,18 +2,20 @@ let phones=document.querySelectorAll(".phone") as NodeList ;
 const URL_API="http://127.0.0.1:8000/api/";
 const ClassFournisseur=document.querySelector(".fournisseurs") as HTMLSelectElement ;
 const ValMontant=document.getElementById("montant") as HTMLInputElement;
-const valider=document.getElementById("valider");
+const valider=document.getElementById("valider") as HTMLButtonElement;
 const transaction=document.getElementById("transaction")as HTMLSelectElement;
 const compte_info=document.getElementById("compte_info");
 const detail=document.querySelector(".detail") as HTMLElement;
-const code =document.getElementById('code') as HTMLFormElement;
-const aff_code=document.getElementById('aff_code');
 const generated=document.querySelector(".generated") ;
+const numero=document.getElementById("numero") as HTMLInputElement;
+
 let   fournisseurAuthorized:string;
 var myHeaders = new Headers();
 myHeaders.append("Content-Type", "application/json");
 myHeaders.append("Accept", "application/json");
 let compteDepot:string|undefined;
+valider.disabled=true;
+
 interface ISend{
     user:string;
     compte?:string;
@@ -23,6 +25,20 @@ interface ISend{
     date:Date;
 
 };
+const notif=numero.parentElement?.querySelector<HTMLElement>(".notification_numero");
+function handleNumSender() {
+    const reg=/^(\d{9})$/;
+    notif?.classList.add("disabled");
+    numero.classList.remove("active");
+    if(sender && fournisseurs[ClassFournisseur.selectedIndex-1]=="WR" && !reg.test(numero.value)){
+        notif?.classList.remove("disabled");
+        console.log(notif);
+        notif?.classList.add("active");
+        numero.classList.add("active");
+        
+                
+    }
+}
 let dataSend:ISend={
     user:"",
     compte:"",
@@ -36,6 +52,14 @@ const fournisseurs=[
     "CB",
     "WR",
 ];
+const type_trans=[
+    {
+        id:1,val:"depot"
+    },
+    {
+        id:2,val:"retrait"
+    },
+]
 const montantMin=[
     500,
     500,
@@ -121,16 +145,22 @@ phones.forEach((phone)=>{
                 sender={...user};
                 if(fournisseur && element.classList.contains("expide")){
                     const color=tabExpediteur.get(fournisseur!.toUpperCase()) || "transparent";
+                    handleNumSender();
                     expediteur.style.backgroundColor=color;
                 }
                 else if(!element.classList.contains("expide")){
                     dataSend.compte=element.value;
+                    notif?.classList.add("disabled");
+                    notif?.classList.remove("active")
+                    numero.classList.remove("active");
 
                 }
                 // else
                 // expediteur.innerHTML=epx;
-            }else
-            expediteur.style.backgroundColor="transparent";
+            }else{
+                expediteur.style.backgroundColor="transparent";
+
+            }
         }
         sibling.querySelector("input")!.value=valueInput; 
         
@@ -138,15 +168,15 @@ phones.forEach((phone)=>{
     })
 })
 
-ClassFournisseur?.addEventListener("change",()=>{
+ClassFournisseur?.addEventListener("change",(event)=>{
+    const target=event.target as HTMLSelectElement;
     const val:number=+ClassFournisseur.value;
     const blues = document.querySelectorAll<HTMLElement>(".blue"); 
-
+    
     blues.forEach((blue) => {   
         const color=tabExpediteur.get(fournisseurs[val-1])||"transparent";
         blue.style.backgroundColor=  color;   
     });
-    // const numero=document.getElementById("numero");
     ValMontant.classList.remove("active");
     const minIndice=montantMin[val-1];
     const not_montant=document.querySelector(".not_montant") as HTMLElement;
@@ -164,8 +194,8 @@ ClassFournisseur?.addEventListener("change",()=>{
         compteDepot=sender.compte.find(com=>com.numero.startsWith(fournisseurAuthorized))?.numero;
                 
     }
-    
-    
+   
+    handleNumSender();
     
 });
 
@@ -188,8 +218,7 @@ valider?.addEventListener("click",()=>{
     dataSend.type=type=="depot"?"1":"2";
     dataSend.montant=ValMontant.value;
     dataSend.date=new Date();
-    if(code.checked)
-        dataSend.code=true;
+   
     // dataSend.compte=document.querySelector<HTMLInputElement>("#recep")?.value;
     dataSend.user=sender.id;
     let raw=JSON.stringify(dataSend);
@@ -205,7 +234,7 @@ valider?.addEventListener("click",()=>{
       .then(result =>{
           console.log(result);
           if(dataSend.code){
-            generated?.querySelector("p")!.textContent=result.code;
+            generated!.querySelector("p")!.textContent=result.code;
           }
         } 
 
@@ -237,16 +266,12 @@ transaction.addEventListener("change",(event)=>{
     if(element.value=="2"){
         dest?.classList.add("disabled");
         console.log(compteDepot);
-        code.checked=false;
         dataSend.compte=compteDepot;
        
     }
     
 })
 
-aff_code?.addEventListener("click",()=>{
-    generated?.parentElement?.classList.add("active");
-})
 
 generated?.querySelector("button")?.addEventListener('click',(event)=>{
     console.log(event.target);

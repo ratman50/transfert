@@ -28,7 +28,7 @@ class UserController extends Controller
                 "numero"=>$find->numero,
                 "fournisseur"=>$tabInfo[0],
                 "compte"=>[$compte],
-                "historique"=>TransactionResource::collection( Transaction::where("user_id",$find->id)->get())
+                "historique"=>TransactionResource::collection( Transaction::where("expediteur_id",$find->id)->get())
             ];
         }
         
@@ -40,7 +40,7 @@ class UserController extends Controller
                 "name"=>$user->name,
                 "numero"=>$user->numero,
                 "compte"=>Compte::where("numero","like","%$numero")->get(),
-                "historique"=>TransactionResource::collection( Transaction::where("user_id",$user->id)->get())
+                "historique"=>TransactionResource::collection( Transaction::where("expediteur_id",$user->id)->get())
             ] ;
         }
         
