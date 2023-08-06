@@ -4,11 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\TransactionResource;
 use App\Models\Transaction;
-use App\Models\User;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Carbon as SupportCarbon;
-use Illuminate\Support\Facades\Hash;
+use Symfony\Component\HttpFoundation\Response;
+
 
 class TransactionController extends Controller
 {
@@ -31,11 +29,52 @@ class TransactionController extends Controller
        
         return $trans;
     }
-    public function flux(Request $request, $numero){
-        $client=$this->check($numero);
-        return TransactionResource::collection( Transaction::where("user_id",$client->id)->get());
-        if($client)
-        return [];
+    public function flux(Request $request){
+        $credentials=$request->validate([
+            "numero"=>["sometimes","required"],
+            "montant"=>["sometimes","required"],
+            "date"=>["sometimes","required"]
+        ]);
+        $where=[];
+        $client=isset($credentials["numero"])?$this->check($credentials["numero"]):null;
+        if(isset($client))
+            $where[]=["expediteur_id",$client->id];
+        if(isset($credentials["date"]) && strlen($credentials["date"])>5)
+        {
+            $date=$credentials["date"];
+            $where[]=["date",'like',"%$date%"];
+        }
+        if(isset($credentials["montant"]) && strlen($credentials["montant"])>3)
+            $where[]=["montant","<=",$credentials["montant"]];
+        return count($where)? TransactionResource::collection( Transaction::where($where)->get()):TransactionResource::collection( Transaction::all());
         
+        
+    }
+    public function retrait(Request $request){
+        $credentials=$request->validate([
+            "code"=>["required","string","exists:App\Models\Transaction,code"]
+        ]);
+        $trans=Transaction::where(
+            [
+                "code"=>$credentials["code"],
+                "retire"=>false
+            ]
+            )->first();
+        if($trans){
+
+            $updateTrans=Transaction::where([
+                "code"=>$credentials["code"],
+                "retire"=>false
+            ])->update(["retire"=>true]);
+            $tab=$trans->toArray();
+            unset($tab["id"]);
+            $trans_eff=Transaction::create($tab)->update([
+                "date"=>now(),
+                "retire"=>true,
+                "type_trans"=>"retrait"
+            ]);
+            return response($trans_eff);
+        }
+        return response(["deja retire"], Response::HTTP_NOT_FOUND);
     }
 }

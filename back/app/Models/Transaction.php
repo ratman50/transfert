@@ -29,11 +29,7 @@ class Transaction extends Model
                 $res[$key]=$info[$value];
             }
         }
-        if(isset($res["code"])){
-            $anc_trans=Transaction::where("code", $res["code"]);
-            $update_anc=Transaction::where("code", $res["code"])->update(["retire"=>true]);
-            
-        }
+       
         if(!isset($res["compte_exp"]) && !isset($res["compte_dest"]) && isset($res["expediteur_id"]) && isset($res["destinataire_id"])){
             if($res["type_trans"]==1){
 

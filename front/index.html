@@ -4,114 +4,167 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <title>Document</title>
 </head>
-<body class="flex jcc aic">
-    <div class="container">
-        <header>Breukh-Transfert</header>
-        <main class="flex jcc aic f_d_c">
-            <div class="child ">
-                <label class="child_label variant">Expediteur</label>
-               <div class="divider"></div>
-               <div class="left">
+<body >
+    <div class="container flex">
+        <div class="card_user">
+            <div class="client hidden" data-key="1">
+                <h1>Client</h1>
+                <div class="content ">
+                    <div class="login-box flex fdc">
 
-                   <div class="container_input  ">
-                       <div class="input">
-                           <label for="" >N°Compte/Tel</label>
-                           <input type="text" class="phone expide" name="" id="numero">
-                           <p class="notification_numero disabled">Seulement le numero</p>
-                       </div>
-                       <div class="input">
-                           <label for="">Nom Complet</label>
-                           <input type="text" name="" id="" disabled>
-                       </div>
-                       <button id="compte_info">i</button>
-                       <div class="detail">
-                        <h3 class="name">nom:<span>Pape Mactar</span> </h3>
-                        <p class="numero">numero:<span>771143226</span></p>
-                        <p>Historiques</p>
-                        <table cellpadding="10" cellspacing="5">
-                            <thead>
-                                <tr><th>Destinataire</th> <th>montant</th> <th>type</th>  <th>date</th> </tr>
-                            </thead>
-                            <tbody>
-                                <tr><td>Compte</td><td>valeur</td></tr>
-                            </tbody>
-                        </table>
+                        <div class="user-box">
+                            <input type="text" name="" required="" id="nameClient">
+                            <label>Nom Complet</label>
+                        </div>
+                        <div class="user-box">
+                            <input type="text" name="" required="" id="numClient">
+                            <label>Numero telephone</label>
+                        </div>
+                        <button type="button" class="add_user disabled">enregistrer <i class="fa-solid fa-paper-plane"></i></button>
                     </div>
+                    <hr>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>N° Tel</th>
+                                <th>Nom Complet</th>
+                                <th>Comptes</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="compte hidden" data-key="2">
+                <h1>compte</h1>
+                <div class="content">
+
+                </div>
+            </div>
+            <div class="historique_user hidden" data-key="3">
+                <h1>historique transaction</h1>
+                <div class="content">
+                    <div class="content_header flex">
+                        <div class="flex fdc">
+                             <label for="">Montant</label>
+                             <input type="text" class="filter montant"/>
+                        </div>
+                        <div class="flex fdc">
+                             <label for="">date</label>
+                             <input type="date" class="filter date"/>
+                        </div>
+                        <div class="flex fdc">
+                             <label for="">N°tel/N°Compte</label>
+                             <input type="text" class="filter numero"/>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="content_body">
+                     <table>
+                         <thead>
+                             <tr>
+                                 <th>Expediteur</th>
+                                 <th>Date</th>
+                                 <th>Destinataire</th>
+                                 <th>Type</th>
+                                 <th>fournisseur</th>
+                                 <th>Montant</th>
+                             </tr>
+                         </thead>
+                         <tbody>
+                         </tbody>
+                     </table>
                     </div>
                 </div>
             </div>
-            <div class="child">
-                <label class="child_label blue">Transaction</label>
-               <div class="divider"></div>
-               <div class="left">
 
-                   <div class="container_input   f_d_c">
-                       <div class="input flex f_d_c">
-                           <label for="">Montant</label>
-                           <input type="text" name="" id="montant" class="SendMontant">
-                           <p class="not_montant">
-                                le montant minimum est
-                           </p>
-                       </div>
-                       <div class="inputs flex ">
-                           <div class="input">
-                               <label for="">Fournisseur</label>
-                               <select name="" id="" class="fournisseurs">
-                                   <option value="">Choisir un Fournisseur</option>
-                                   <option value="1">Orange Money</option>
-                                   <option value="2">Wave</option>
-                                   <option value="3">Compte Bancaire</option>
-                                   <option value="4">Wari</option>
-                               </select>
-                               <p class="notif_fournisseur">
+        </div>
+        <div class="container_menu">
+            <div class="menu-btn">
+                <div class="menu-btn__burger"></div>
+            </div>
+            <div class="tasks">
+                <div class="dropdown dropdown-5">
+                    <ul class="dropdown_menu dropdown_menu-5">
+                        <li class="dropdown_item" data-key="1">Client</li>
+                        <li class="dropdown_item" data-key="2">Compte</li>
+                        <li class="dropdown_item" data-key="3">historique</li>
+                    </ul>
+                </div>
+            </div>
 
-                               </p>
-                           </div>
-                           <div class="input">
-                               <label for="">Transaction</label>
-                               <select name=""  id="transaction">
-                                   <option value="">choisir un type de Transaction</option>
-                                   <option value="1">depot</option>
-                                   <option value="2">retrait</option>
-                               </select>
-                           </div>
-   
-                       </div>
-                   </div>
-               </div>
+        </div>
+        <div class="card_trans">
+            <div class="expediteur lw">
+                <h2 class="expediteur"><span>Expediteur</span></h2>
+                <div class="divider"></div>
+                <div class="content_info">
+                    <div class="info_user">
+                        <label for="">N°Compte/Tel</label>
+                        <input type="text">
+                    </div>
+                    <div class="info_user">
+                        <label for="">Nom Complet</label>
+                        <input type="text">
+                    </div>
+                </div>
             </div>
-            <div class="child">
-                <label class="child_label blue">Destination</label>
-               <div class="divider"></div>
-               <div class="left">
+            <div class="historique disabled">
+                <h2 ><span>historique</span></h2>
+                <div class="divider"></div>
 
-                   <div class="container_input dest">
-                       <div class="input">
-                           <label for="" >N°Compte/Tel</label>
-                           <input type="text" class="phone" name="" id="recep">
-                       </div>
-                       <div class="input">
-                           <label for="">Nom Complet</label>
-                           <input type="text" name="" id="" disabled>
-                       </div>
-                   </div>
-               </div>
             </div>
-            <div class="container_btn">
-                <button type="button" id="valider">Valider</button>
-            </div>
-           
-        </main>
-        <div class="container_code flex jcc aic">
+            <div class="transaction">
+                <h2 class="expediteur"><span>Transaction</span></h2>
+                <div class="divider"></div>
+                    <div class="left">
 
-            <div class="generated ">
-                <p>bla</p>
-                <button>close</button>
+                        <div class="content_info fdc container_transaction mb">
+        
+                            <div class="montant flex fdc">
+                                <label for="">Montant</label>
+                                <input type="text" name="" id="montant">
+                            </div>
+                            <div class="fourni_trans flex">
+                                <div class="fournisseur info_user">
+                                    <label for="">Fournisseur</label>
+                                    <select name="" id="fournisseur">
+                                        <option value="">choisir un fournisseur</option>
+
+                                    </select>
+                                </div>
+                                <div class="transaction info_user">
+                                    <label for="">Transaction</label>
+                                    <select name="" id="transaction">
+                                        <option value="">choisir une transaction</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
             </div>
+            <div class="destinataire lw">
+                <h2 class="expediteur">destinataire</h2>
+                <div class="divider"></div>
+                <div class="content_info">
+                    <div class="info_user">
+                        <label for="">N°Compte/Tel</label>
+                        <input type="text">
+                    </div>
+                    <div class="info_user">
+                        <label for="">Nom Complet</label>
+                        <input type="text">
+                    </div>
+                </div>
+
+            </div>
+            <button type="button" id="send">send</button>
         </div>
     </div>
-    <script src="./lib/index.js" type="module"></script>
+    <script src="lib/js/index.js" type="module"></script>
 </body>
 </html>
